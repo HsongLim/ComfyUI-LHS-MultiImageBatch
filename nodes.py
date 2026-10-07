@@ -59,7 +59,7 @@ def _paths_from_list(images_text):
     paths = []
     for line in (images_text or "").splitlines():
         line = line.strip().strip('"')
-        if not line:
+        if not line or line.startswith("#"):  # "#" = image turned off in the node
             continue
         if os.path.isabs(line):
             path = line
@@ -182,7 +182,8 @@ class MultiImageLoader:
                     "multiline": True,
                     "default": "",
                     "tooltip": "One image per line (relative to ComfyUI/input). "
-                               "Filled automatically by the Upload button / drag & drop.",
+                               "Filled automatically by the Upload button / drag & drop. "
+                               "Lines starting with # are turned off.",
                 }),
             },
             "optional": {
@@ -215,6 +216,10 @@ class MultiImageLoader:
     def load(self, images, folder="", start_index=0, max_images=0):
         paths = _collect_paths(images, folder, start_index, max_images)
         if not paths:
+            off = [l for l in (images or "").splitlines() if l.strip().startswith("#")]
+            if off:
+                raise ValueError("[Multi Image Loader] All images are turned off. "
+                                 "Turn at least one on (click its circle).")
             raise ValueError("[Multi Image Loader] No images. Upload some images "
                              "or set a folder.")
         out_images, out_masks, out_names = [], [], []

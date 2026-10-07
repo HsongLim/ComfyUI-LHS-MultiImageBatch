@@ -13,6 +13,7 @@ Review all results in one grid, pick the ones you like and save only those.
 ### Multi Image Loader (LHS)
 - **Upload images** 버튼 또는 노드 위로 드래그 & 드롭해서 여러 장을 한 번에 추가
 - 썸네일 그리드로 목록 확인, `×` 로 개별 삭제, 클릭하면 크게 보기
+- 썸네일 왼쪽 위 **동그라미를 클릭하면 이미지 켜기/끄기** — 꺼진 이미지(OFF)는 목록에 남아 있지만 실행할 때 건너뜁니다. **All on / All off** 로 한 번에 전환
 - `folder` 에 폴더 경로를 넣으면 그 폴더의 이미지도 함께 로드 (절대 경로 또는 `ComfyUI/input` 기준 상대 경로)
 - `start_index` / `max_images` 로 일부만 테스트
 - 출력은 **리스트**라서 뒤에 연결된 노드(KSampler 등)가 이미지마다 한 번씩 순차 실행됩니다

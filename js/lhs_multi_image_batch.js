@@ -29,6 +29,13 @@ function injectStyle() {
   .mit-cell .mit-btn{position:absolute;top:2px;right:2px;width:20px;height:20px;border:none;border-radius:50%;
     background:rgba(0,0,0,.65);color:#fff;font-size:12px;line-height:20px;padding:0;cursor:pointer;opacity:0;z-index:2}
   .mit-cell:hover .mit-btn{opacity:1}
+  .mit-cell .mit-tog{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;border:2px solid #fff;
+    background:#4caf50;color:#fff;font-size:12px;line-height:16px;text-align:center;padding:0;cursor:pointer;z-index:3;box-sizing:border-box}
+  .mit-cell.mit-off .mit-tog{background:rgba(40,40,40,.85);border-color:#888;color:#aaa}
+  .mit-cell.mit-off img{opacity:.28;filter:grayscale(1)}
+  .mit-cell.mit-off .mit-label{text-decoration:line-through;color:#aaa}
+  .mit-cell.mit-off::after{content:"OFF";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    font-size:12px;font-weight:bold;color:#ddd;background:rgba(0,0,0,.55);padding:1px 6px;border-radius:3px;pointer-events:none}
   .mit-cell .mit-label{position:absolute;left:0;right:0;bottom:0;font-size:10px;color:#fff;background:rgba(0,0,0,.6);
     padding:1px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .mit-empty{grid-column:1/-1;color:#999;font-size:12px;text-align:center;padding:24px 6px;line-height:1.5}
@@ -201,17 +208,26 @@ function setupLoader(node) {
   fileInput.style.display = "none";
   document.body.appendChild(fileInput);
 
+  // a line starting with "#" is an image that is turned off (kept in the list, skipped when run)
   const getLines = () => (textW.value || "").split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+  const isOn = (line) => !line.startsWith("#");
+  const pathOf = (line) => line.replace(/^#+\s*/, "");
   const setLines = (lines) => {
     textW.value = lines.join("\n");
+    textW.callback?.(textW.value);
     render();
     node.setDirtyCanvas?.(true, true);
+    app.graph?.change?.();
   };
+  const setOn = (i, on) => { const ls = getLines(); ls[i] = on ? pathOf(ls[i]) : "#" + pathOf(ls[i]); setLines(ls); };
+  const setAll = (on) => setLines(getLines().map((l) => (on ? pathOf(l) : "#" + pathOf(l))));
 
   const render = () => {
     grid.replaceChildren();
     const lines = getLines();
-    info.textContent = lines.length ? `${lines.length} image(s)` : "No images";
+    const onCount = lines.filter(isOn).length;
+    info.textContent = !lines.length ? "No images"
+      : onCount === lines.length ? `${lines.length} image(s)` : `${onCount} / ${lines.length} on`;
     if (!lines.length) {
       const e = document.createElement("div");
       e.className = "mit-empty";
@@ -220,13 +236,16 @@ function setupLoader(node) {
       return;
     }
     const items = lines.map((l) => {
-      const p = splitPath(l);
+      const p = splitPath(pathOf(l));
       return { url: viewURL({ ...p, type: "input" }), label: p.filename };
     });
     items.forEach((it, i) => {
+      const on = isOn(lines[i]);
       const cell = document.createElement("div");
-      cell.className = "mit-cell";
-      cell.title = lines[i];
+      cell.className = "mit-cell" + (on ? "" : " mit-off");
+      cell.title = pathOf(lines[i]) + (on ? "" : "  (off - skipped when the workflow runs)");
+      const tog = button(on ? "\u2713" : "", () => setOn(i, !on), "mit-tog");
+      tog.title = on ? "On - click to skip this image" : "Off - click to use this image";
       const img = document.createElement("img");
       img.loading = "lazy";
       img.src = it.url;
@@ -235,7 +254,7 @@ function setupLoader(node) {
       const label = document.createElement("div");
       label.className = "mit-label";
       label.textContent = `${i + 1}. ${it.label}`;
-      cell.append(img, del, label);
+      cell.append(img, tog, del, label);
       cell.addEventListener("click", () => openLightbox(items, i));
       grid.appendChild(cell);
     });
@@ -275,6 +294,8 @@ function setupLoader(node) {
   bar.append(
     info,
     button("📂 Upload images", () => fileInput.click(), "mit-primary"),
+    button("All on", () => setAll(true)),
+    button("All off", () => setAll(false)),
     button("Clear", () => setLines([])),
   );
   wrap.append(bar, grid);
