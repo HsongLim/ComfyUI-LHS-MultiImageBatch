@@ -30,7 +30,7 @@ Review all results in one grid, pick the ones you like and save only those.
   - 워크플로 메타데이터는 png / png16에 저장됩니다
   - 추가 패키지 없이 동작합니다 (png16/tiff/exr 직접 기록, tiff·exr은 무압축)
   - Save selected도 원본 32-bit 데이터에서 저장하므로 16-bit 정밀도가 그대로 유지됩니다
-- `labels` 에 Multi Image Loader 의 `filenames` 를 연결하면 각 결과 밑에 원본 파일명이 표시됩니다
+- `labels` 에 Multi Image Loader 의 `filenames` 를 연결하면 각 결과 밑에 원본 파일명이 표시됩니다. 앞쪽 어딘가에 Multi Image Loader 가 있으면 **자동으로 연결**됩니다 (직접 끊으면 다시 연결하지 않음)
 - `output_folder` : 저장 폴더. 비워두면 ComfyUI `output` 폴더, `D:\renders\project` 같은 절대 경로도 가능
 - `version_folders` (기본 켜짐) : 실행할 때마다 버전 폴더를 새로 만들어 저장
 

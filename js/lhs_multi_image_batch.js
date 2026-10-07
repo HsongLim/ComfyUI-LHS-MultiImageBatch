@@ -149,6 +149,37 @@ function addGridWidget(node, name, element, minHeight) {
   });
 }
 
+
+// ------------------------------------------------------------------ auto labels
+// Find the nearest Multi Image Loader upstream of the given input.
+function findUpstreamLoader(node, inputName) {
+  const start = node.inputs?.findIndex((i) => i.name === inputName);
+  if (start == null || start < 0 || node.inputs[start].link == null) return null;
+  const queue = [node.getInputNode?.(start)].filter(Boolean), seen = new Set([node.id]);
+  while (queue.length) {
+    const n = queue.shift();
+    if (seen.has(n.id)) continue; seen.add(n.id);
+    if (n.type === LOADER) return n;
+    (n.inputs || []).forEach((inp, i) => { if (inp.link != null) { const o = n.getInputNode?.(i); if (o) queue.push(o); } });
+  }
+  return null;
+}
+
+// Connect the loader's 'filenames' to our 'labels' once (not again if the user removes it).
+function autoConnectLabels(node, inputName) {
+  const li = node.inputs?.findIndex((i) => i.name === "labels");
+  if (li == null || li < 0 || node.inputs[li].link != null) return false;
+  const loader = findUpstreamLoader(node, inputName);
+  if (!loader) return false;
+  node.properties = node.properties || {};
+  if (node.properties.lhs_auto_labels === loader.id) return false;
+  const oi = loader.outputs?.findIndex((o) => o.name === "filenames");
+  if (oi == null || oi < 0) return false;
+  loader.connect(oi, node, li);
+  node.properties.lhs_auto_labels = loader.id;
+  return true;
+}
+
 // ------------------------------------------------------------------ loader
 function setupLoader(node) {
   const textW = node.widgets?.find((w) => w.name === "images");
@@ -378,6 +409,17 @@ function setupPicker(node) {
     fmtW.callback = function () { const r = cb?.apply(this, arguments); updateFormatOptions(node); return r; };
   }
   updateFormatOptions(node);
+
+  // auto-connect Multi Image Loader 'filenames' -> 'labels' when a loader is upstream
+  const onConn = node.onConnectionsChange;
+  node.onConnectionsChange = function () {
+    const r = onConn?.apply(this, arguments);
+    setTimeout(() => autoConnectLabels(node, "images"), 0);
+    return r;
+  };
+  const labelTimer = setInterval(() => { if (node.graph) autoConnectLabels(node, "images"); }, 1500);
+  const onRemoved = node.onRemoved;
+  node.onRemoved = function () { clearInterval(labelTimer); return onRemoved?.apply(this, arguments); };
 
   node.mitRender = render;
   render();
