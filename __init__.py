@@ -1,4 +1,5 @@
-"""ComfyUI LHS Multi Image Batch - run many images at once, pick & save the best."""
+"""ComfyUI LHS image nodes: Multi Image Batch (load many, pick & save), Image Guide Painter,
+Image Compare."""
 
 import os
 import shutil
@@ -98,5 +99,11 @@ async def _mit_save_selected(request):
 
     return web.json_response({"saved": saved, "skipped": skipped})
 
+
+from . import compare_nodes as _compare, guide_nodes as _guide
+
+for _m in (_guide, _compare):
+    NODE_CLASS_MAPPINGS.update(_m.NODE_CLASS_MAPPINGS)
+    NODE_DISPLAY_NAME_MAPPINGS.update(_m.NODE_DISPLAY_NAME_MAPPINGS)
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
