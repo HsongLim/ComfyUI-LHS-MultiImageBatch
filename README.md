@@ -130,7 +130,7 @@ Multi Image Loader (LHS) ─images────▶ Image Guide Painter (LHS) ─ 
 
 ```bash
 cd ComfyUI/custom_nodes
-git clone https://github.com/HsongLim/ComfyUI-LHS-MultiImageBatch.git
+git clone https://github.com/HsongLim/ComfyUI-LHS-Nodes.git
 ```
 ComfyUI를 재시작하세요. 추가 패키지 설치는 필요 없습니다.
 업데이트: 이 폴더에서 `git pull` 후 재시작.
