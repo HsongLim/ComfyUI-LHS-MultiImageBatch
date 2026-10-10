@@ -156,4 +156,4 @@ class ImageGuidePainter:
 
 
 NODE_CLASS_MAPPINGS = {"LHS_ImageGuidePainter": ImageGuidePainter}
-NODE_DISPLAY_NAME_MAPPINGS = {"LHS_ImageGuidePainter": "Image Guide Painter (LHS)"}
+NODE_DISPLAY_NAME_MAPPINGS = {"LHS_ImageGuidePainter": "💎 Image Guide Painter (LHS)"}

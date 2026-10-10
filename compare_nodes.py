@@ -86,4 +86,4 @@ class ImageCompare:
 
 
 NODE_CLASS_MAPPINGS = {"LHS_ImageCompare": ImageCompare}
-NODE_DISPLAY_NAME_MAPPINGS = {"LHS_ImageCompare": "Image Compare (LHS)"}
+NODE_DISPLAY_NAME_MAPPINGS = {"LHS_ImageCompare": "💎 Image Compare (LHS)"}

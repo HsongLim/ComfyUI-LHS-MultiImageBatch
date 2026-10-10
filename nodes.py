@@ -396,6 +396,6 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "MIT_MultiImageLoader": "Multi Image Loader (LHS)",
-    "MIT_MultiImagePicker": "Image Picker & Save (LHS)",
+    "MIT_MultiImageLoader": "💎 Multi Image Loader (LHS)",
+    "MIT_MultiImagePicker": "💎 Image Picker & Save (LHS)",
 }

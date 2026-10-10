@@ -4,12 +4,12 @@
 
 | 노드 | 메뉴 | 하는 일 |
 |---|---|---|
-| Multi Image Loader (LHS) | LHS → Multi Image Batch | 여러 장 한 번에 넣고 순서대로 실행, 이미지별 켜기/끄기 |
-| Image Picker & Save (LHS) | LHS → Multi Image Batch | 결과를 그리드로 보고 골라서 저장 (png / png16 / jpg / tiff / exr) |
-| Image Guide Painter (LHS) | LHS → Image Guide | 이미지 위에 박스·원·펜·화살표·글자로 편집 가이드 그리기 |
-| Image Compare (LHS) | LHS → Image Compare | A / B 이름표가 붙은 이미지 비교 (슬라이더, 나란히, 전환, 차이) |
+| 💎 Multi Image Loader (LHS) | LHS → Multi Image Batch | 여러 장 한 번에 넣고 순서대로 실행, 이미지별 켜기/끄기 |
+| 💎 Image Picker & Save (LHS) | LHS → Multi Image Batch | 결과를 그리드로 보고 골라서 저장 (png / png16 / jpg / tiff / exr) |
+| 💎 Image Guide Painter (LHS) | LHS → Image Guide | 이미지 위에 박스·원·펜·화살표·글자로 편집 가이드 그리기 |
+| 💎 Image Compare (LHS) | LHS → Image Compare | A / B 이름표가 붙은 이미지 비교 (슬라이더, 나란히, 전환, 차이) |
 
-노드 검색 (캔버스 더블클릭) 에서 `LHS` 로 찾을 수 있습니다.
+노드 이름 앞의 💎 가 LHS 노드 표시입니다. 노드 검색 (캔버스 더블클릭) 에서 `LHS` 로 찾을 수 있습니다.
 
 ## 1. Multi Image Batch
 
